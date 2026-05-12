@@ -83,7 +83,7 @@ Sessions 1-4 teach ML fundamentals as background for engineering decisions:
 | MP3 | Individual, 2 weeks | 100 | Weeks 5-6 | Tools & Integration |
 | MP4 | Individual, 2 weeks | 100 | Weeks 7-9 | Centaur Engineering + Eval & Trust |
 | Quiz 1 | In-class | 100 | Session 10 (Apr 30) | Foundation + Pillars 1-2 |
-| Quiz 2 | In-class | 100 | Week 9 | Pillars 3-5 |
+| Quiz 2 | In-class | 100 | Thu, May 28 (Session 18) | Pillars 3-5 |
 | News Discussion | Rotating | 100 | All quarter | All pillars |
 | MP5 / Final Presentation | Team (3-4), live | 300 | Week 10 | All pillars |
 | **Total** | | **1,000** | | |
@@ -109,12 +109,15 @@ Mini-projects ARE the homework — there is no separate homework category.
 |----|----------|----------------|-----------------|
 | MP1 | Tue, March 31 (Session 1) | Mon, April 13, 11:59 PM | Goal & Direction |
 | MP2 | Tue, April 14 (Session 5) | Mon, April 27, 11:59 PM | Context Management |
-| MP3 | Tue, April 28 (Session 9) | Mon, May 11, 11:59 PM | Tools & Integration |
-| MP4 | Tue, May 12 (Session 13) | Mon, May 25, 11:59 PM | Centaur + Eval & Trust |
-| MP5 | Tue, May 19 (Session 17) | Finals week | All pillars (team) |
+| MP3 | Tue, April 28 (Session 9) | Fri, May 15, 11:59 PM | Tools & Integration |
+| MP4 | Tue, May 12 (Session 13) | Fri, May 29, 11:59 PM | Centaur + Eval & Trust |
+| MP5 | Fri, May 29 (kickoff after MP4 closes) | Thu, June 4 (presentation day) | All pillars (team) |
 
-Note: Each MP is assigned on a Tuesday and due at 11:59 PM 13 days later
-(Monday night). The next MP is assigned the following Tuesday.
+Note: MP1–MP3 each follow a two-week Tuesday-to-Friday cycle (assigned
+Tuesday, due 11:59 PM eleven days later on the Friday before the next
+MP launches). MP4 was extended by three days (due Fri May 29 instead of
+Tue May 26) to give students an extra weekend after the MP3 deadline
+shift; MP5 kicks off the day MP4 closes and presents Thursday June 4.
 
 ### Part A notebook pattern: Learn → Explore → Solve
 

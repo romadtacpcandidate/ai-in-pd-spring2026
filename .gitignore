@@ -45,3 +45,29 @@ Module_2_in_class/*.js
 Module_2_in_class/render_slides.py
 Module_2_in_class/qa_deck.py
 Module_2_in_class/session5_instructor_notes.md
+
+# Module 3 in-class instructor tooling
+Module_3_in_class/node_modules/
+Module_3_in_class/render_*/
+Module_3_in_class/package*.json
+Module_3_in_class/*.js
+Module_3_in_class/render_slides.py
+Module_3_in_class/qa_deck.py
+Module_3_in_class/**/*_instructor_notes.md
+Module_3_in_class/**/node_modules/
+Module_3_in_class/**/package*.json
+
+# Module 4 in-class instructor tooling
+Module_4_in_class/node_modules/
+Module_4_in_class/render_*/
+Module_4_in_class/package*.json
+Module_4_in_class/*.js
+Module_4_in_class/render_slides.py
+Module_4_in_class/qa_deck.py
+Module_4_in_class/**/*_instructor_notes.md
+
+# Instructor validation scripts (not student-facing)
+validate_*.py
+
+# Stray npm lock at repo root
+/package-lock.json
