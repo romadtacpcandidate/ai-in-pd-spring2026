@@ -1,0 +1,26 @@
+2026-05-15 20:55:35,499 | INFO | Starting MiniClaw MCP server (pid=55784) at 2026-05-15T20:55:35
+2026-05-15 21:29:45,997 | INFO | Starting MiniClaw MCP server (pid=57864) at 2026-05-15T21:29:45
+2026-05-15 21:29:46,017 | INFO | Processing request of type ListToolsRequest
+2026-05-15 21:29:46,019 | INFO | Processing request of type ListPromptsRequest
+2026-05-15 21:29:46,020 | INFO | Processing request of type ListResourcesRequest
+2026-05-15 21:30:32,651 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:30:32,654 | INFO | TOOL_CALL | query_miniclaw_rag | question='FilaTech PolyPro PLA interlayer tensile strength vs bulk tensile strength' n_results=4
+2026-05-15 21:30:32,709 | INFO | No device provided, using cpu
+2026-05-15 21:30:33,026 | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-15 21:30:33,119 | INFO | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-05-15 21:30:34,804 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=4 top=ACME-MFG-002
+2026-05-15 21:30:37,357 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:30:37,357 | INFO | TOOL_CALL | query_miniclaw_rag | question='WidgetBot 2.0 printed gear test module 0.8 minimum face width failure mode' n_results=4
+2026-05-15 21:30:37,369 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=4 top=ACME-MFG-003
+2026-05-15 21:30:42,690 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:30:42,691 | INFO | TOOL_CALL | query_miniclaw_rag | question='module 0.8 gear face width MiniClaw drive gear' n_results=4
+2026-05-15 21:30:42,701 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=4 top=ACME-ENG-003
+2026-05-15 21:30:48,693 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:30:48,694 | INFO | TOOL_CALL | query_miniclaw_rag | question='WidgetBot gear failure mode tooth shear root crack premature failure' n_results=3
+2026-05-15 21:30:48,703 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=3 top=ACME-MFG-003
+2026-05-15 21:30:56,637 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:30:56,637 | INFO | TOOL_CALL | query_miniclaw_rag | question='Hiwonder BigClaw teardown printed gear pin diameter' n_results=5
+2026-05-15 21:30:56,647 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=5 top=ACME-VND-002
+2026-05-15 21:31:06,080 | INFO | Processing request of type CallToolRequest
+2026-05-15 21:31:06,081 | INFO | TOOL_CALL | query_miniclaw_rag | question='BigClaw pin shaft diameter linkage construction material' n_results=4
+2026-05-15 21:31:06,090 | INFO | TOOL_RESULT | query_miniclaw_rag | chunks=4 top=ACME-VND-002
