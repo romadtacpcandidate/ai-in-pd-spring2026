@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniClaw — Live Demo</title>
+<style>
+  :root{
+    --navy:#21295C; --deep:#065A82; --teal:#1C7293; --ice:#CADCFC;
+    --amber:#E0A458; --green:#2C9A5B; --red:#C0504D; --ink:#1B2430;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:Arial,Helvetica,sans-serif; background:var(--navy); color:#fff;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:24px;
+  }
+  h1{font-family:Cambria,Georgia,serif; font-size:30px; font-weight:bold; margin-bottom:2px;}
+  .kicker{letter-spacing:3px; font-size:12px; color:var(--ice); font-weight:bold; margin-bottom:10px;}
+  .wrap{display:flex; gap:24px; flex-wrap:wrap; justify-content:center; align-items:flex-start; max-width:1200px;}
+  canvas{background:#0E1A40; border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,.35);}
+  .panel{width:300px; display:flex; flex-direction:column; gap:14px;}
+  .stat{background:#0E1A40; border-radius:12px; padding:16px 18px;}
+  .stat .lab{font-size:12px; letter-spacing:2px; color:#9FB3D1; font-weight:bold;}
+  .stat .val{font-family:Cambria,Georgia,serif; font-size:34px; font-weight:bold; margin-top:4px;}
+  .stat .sub{font-size:12px; color:#9FB3D1; margin-top:2px;}
+  .controls{background:#0E1A40; border-radius:12px; padding:18px;}
+  .controls label{font-size:13px; color:var(--ice); display:block; margin-bottom:8px;}
+  input[type=range]{width:100%; accent-color:var(--teal); height:6px;}
+  .btnrow{display:flex; gap:10px; margin-top:14px;}
+  button{flex:1; background:var(--teal); color:#fff; border:none; border-radius:8px;
+    padding:10px; font-size:14px; font-weight:bold; cursor:pointer;}
+  button:hover{background:var(--deep);}
+  button.alt{background:#33415C;}
+  .foot{font-size:12px; color:#9FB3D1; margin-top:14px; text-align:center; max-width:1200px;}
+  .badge{display:inline-block; padding:2px 8px; border-radius:6px; font-size:12px; font-weight:bold; margin-left:6px;}
+</style>
+</head>
+<body>
+  <div class="kicker">MP5 — LIVE DEMO</div>
+  <h1>MiniClaw Gripper — Four-Bar Linkage</h1>
+  <p style="color:#9FB3D1;font-size:13px;margin-bottom:18px;">Drag the slider to drive the input crank. Both jaws are mirrored.</p>
+
+  <div class="wrap">
+    <canvas id="cv" width="640" height="560"></canvas>
+    <div class="panel">
+      <div class="stat">
+        <div class="lab">INPUT ANGLE  θ₂</div>
+        <div class="val" id="thVal">—</div>
+        <div class="sub">sweep 100° (closed) → 175° (open)</div>
+      </div>
+      <div class="stat">
+        <div class="lab">TRANSMISSION ANGLE  μ</div>
+        <div class="val"><span id="muVal">—</span><span class="badge" id="muBadge"></span></div>
+        <div class="sub">workable band 40°–140° · ideal 90°</div>
+      </div>
+      <div class="stat">
+        <div class="lab">TOTAL JAW OPENING</div>
+        <div class="val" id="jawVal">—</div>
+        <div class="sub">= 2 × single-side displacement</div>
+      </div>
+      <div class="controls">
+        <label for="sl">Input crank θ₂</label>
+        <input type="range" id="sl" min="100" max="175" value="100" step="0.5">
+        <div class="btnrow">
+          <button id="play">▶ Play cycle</button>
+          <button id="reset" class="alt">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="foot">32/10/32/20 crank-rocker, 38 mm finger · verified: jaw 41.9 mm, μ 81.5–105.3°, fits 46×55 mm half-envelope.</p>
+
+<script>
+// ---- design (mm) ----
+const r1=32, r2=10, r3=32, r4=20, Lf=38;
+const TH_MIN=100, TH_MAX=175;
+const O2=[0,0], O4=[r1,0];
+const ENV_W=46, ENV_H=55;
+const ENV_X0=(-9.96+32)/2 - ENV_W/2, ENV_Y0=(0+37.48)/2 - ENV_H/2;
+
+function solve(thDeg, branch=+1){
+  const th=thDeg*Math.PI/180;
+  const A=[O2[0]+r2*Math.cos(th), O2[1]+r2*Math.sin(th)];
+  const dx=O4[0]-A[0], dy=O4[1]-A[1];
+  const d=Math.hypot(dx,dy);
+  const a=(d*d+r3*r3-r4*r4)/(2*d);
+  const h=Math.sqrt(Math.max(r3*r3-a*a,0));
+  const ex=dx/d, ey=dy/d;
+  const px=A[0]+a*ex, py=A[1]+a*ey;
+  const B=[px - branch*h*ey, py + branch*h*ex];
+  const th4=Math.atan2(B[1]-O4[1], B[0]-O4[0]);
+  const tip=[O4[0]+Lf*Math.cos(th4), O4[1]+Lf*Math.sin(th4)];
+  // transmission angle at B between coupler (B->A) and rocker (B->O4)
+  const u=[A[0]-B[0],A[1]-B[1]], v=[O4[0]-B[0],O4[1]-B[1]];
+  const mu=Math.acos(Math.max(-1,Math.min(1,(u[0]*v[0]+u[1]*v[1])/(Math.hypot(...u)*Math.hypot(...v)))))*180/Math.PI;
+  return {A,B,tip,mu};
+}
+const closedTip = solve(TH_MIN).tip;
+const Xc = closedTip[0];            // mirror axis through closed tip → jaws touch when closed
+function mirror(p){ return [2*Xc-p[0], p[1]]; }
+
+// ---- view transform ----
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+const VX0=-16, VX1=68, VY0=-8, VY1=50;
+const sx = cv.width/(VX1-VX0), sy = cv.height/(VY1-VY0);
+const sc = Math.min(sx,sy);
+function tx(x){ return (x-VX0)*sc + (cv.width-(VX1-VX0)*sc)/2; }
+function ty(y){ return cv.height - ((y-VY0)*sc + (cv.height-(VY1-VY0)*sc)/2); }
+
+let trail=[];
+function drawLinkage(s, mir){
+  const A = mir?mirror(s.A):s.A, B=mir?mirror(s.B):s.B, tip=mir?mirror(s.tip):s.tip;
+  const o2=mir?mirror(O2):O2, o4=mir?mirror(O4):O4;
+  const seg=(p,q,col,w)=>{ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(tx(p[0]),ty(p[1]));ctx.lineTo(tx(q[0]),ty(q[1]));ctx.stroke();};
+  seg(o2,o4,'#5b6b8a',3);                 // ground
+  seg(o2,A,'#4FA3D1',5);                   // input crank
+  seg(A,B,'#5FD08A',5);                    // coupler
+  seg(o4,tip,'#E8EDF5',7);                 // output + finger
+  const dot=(p,c,r=6)=>{ctx.fillStyle=c;ctx.beginPath();ctx.arc(tx(p[0]),ty(p[1]),r,0,7);ctx.fill();};
+  dot(o2,'#cdd7ea',6); dot(o4,'#cdd7ea',6); dot(A,'#4FA3D1',5); dot(B,'#5FD08A',5);
+  dot(tip,'#E0A458',7);
+}
+function draw(th){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  // envelope (one side + mirror)
+  ctx.strokeStyle='rgba(202,220,252,.35)'; ctx.setLineDash([5,5]); ctx.lineWidth=1.5;
+  ctx.strokeRect(tx(ENV_X0),ty(ENV_Y0+ENV_H),ENV_W*sc,ENV_H*sc);
+  const mEnvX0 = 2*Xc-(ENV_X0+ENV_W);
+  ctx.strokeRect(tx(mEnvX0),ty(ENV_Y0+ENV_H),ENV_W*sc,ENV_H*sc);
+  ctx.setLineDash([]);
+  // center line
+  ctx.strokeStyle='rgba(224,164,88,.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(tx(Xc),ty(VY0)); ctx.lineTo(tx(Xc),ty(VY1)); ctx.stroke();
+
+  const s=solve(th);
+  // tip trail (both sides)
+  trail.push([s.tip[0],s.tip[1]]);
+  if(trail.length>120) trail.shift();
+  ctx.lineWidth=1.4;
+  [false,true].forEach(mir=>{
+    ctx.strokeStyle='rgba(224,164,88,.5)'; ctx.beginPath();
+    trail.forEach((p,i)=>{const q=mir?mirror(p):p; const X=tx(q[0]),Y=ty(q[1]); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+    ctx.stroke();
+  });
+  drawLinkage(s,false);
+  drawLinkage(s,true);
+
+  // readouts
+  const disp=Math.hypot(s.tip[0]-closedTip[0], s.tip[1]-closedTip[1]);
+  document.getElementById('thVal').textContent=th.toFixed(1)+'°';
+  document.getElementById('muVal').textContent=s.mu.toFixed(1)+'°';
+  document.getElementById('jawVal').textContent=(2*disp).toFixed(1)+' mm';
+  const badge=document.getElementById('muBadge');
+  if(s.mu>=40 && s.mu<=140){badge.textContent='in band'; badge.style.background='rgba(44,154,91,.25)'; badge.style.color='#7ee0a3';}
+  else{badge.textContent='OUT OF BAND'; badge.style.background='rgba(192,80,77,.3)'; badge.style.color='#ff9b96';}
+}
+
+const sl=document.getElementById('sl');
+sl.addEventListener('input',()=>{trail=[]; draw(parseFloat(sl.value));});
+
+let playing=false, dir=1, raf=null;
+document.getElementById('play').addEventListener('click',function(){
+  playing=!playing; this.textContent=playing?'❚❚ Pause':'▶ Play cycle';
+  if(playing) loop(); else cancelAnimationFrame(raf);
+});
+function loop(){
+  let v=parseFloat(sl.value)+dir*0.6;
+  if(v>=TH_MAX){v=TH_MAX;dir=-1;} if(v<=TH_MIN){v=TH_MIN;dir=1;}
+  sl.value=v; draw(v);
+  if(playing) raf=requestAnimationFrame(loop);
+}
+document.getElementById('reset').addEventListener('click',()=>{
+  playing=false; document.getElementById('play').textContent='▶ Play cycle';
+  cancelAnimationFrame(raf); sl.value=TH_MIN; trail=[]; draw(TH_MIN);
+});
+
+draw(TH_MIN);
+</script>
+</body>
+</html>

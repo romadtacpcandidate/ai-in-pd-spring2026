@@ -1,12 +1,10 @@
-# MP5 — Self-Assessment (run 24 h before presenting)
-
+# MP5 — Self-Assessment 
 | Check | Status | Note |
 |-------|--------|------|
 | `slides.pdf` exported (not editable) and pushed to `MP5/` | ☐ | export from your deck tool to PDF |
 | Repo URL submitted on Canvas | ☐ | the night before your session |
-| Demo runs end-to-end on the presenting laptop | ☐ | open the sim in the room browser and scrub it |
-| Interactive sim (`demo/miniclaw_sim.html`) opens & runs in the room browser | ☐ | test on the actual machine |
-| Fallback demo video present in `demo/` | ☐ | screen-record the sim; `four_bar_sweep_fallback.gif` is secondary |
+| Demo runs end-to-end on the presenting laptop | ☐ | test on the actual machine |
+| Fallback demo video present in `demo/` | ☑ | `demo/four_bar_sweep_fallback.gif` |
 | Live MCP/tool call rehearsed, with recorded fallback | ☐ | see README demo plan; record a backup run |
 | Wrong-AI moment is in the deck and told directly | ☑ | the 58° μ stroke-only sweep |
 | Final trust ledger in repo | ☑ | `trust_ledger_final.md` |
