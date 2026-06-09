@@ -1,6 +1,6 @@
 # MP4 Part B — DFM Checklist
 
-**Team:** _member names_
+**Team:**Jinu
 
 > If your team's chosen linkage geometry exists only as plots and not in
 > CAD yet, prioritize bringing it (and the drive train) into a CAD tool
